@@ -1,11 +1,23 @@
-import React from 'react'
+import Styles from './WorkSpace.module.css'
 
-function WorkSpace() {
-  return (
-    <div style={{marginTop:"5rem"}}>
-      <h1>This is Manage Tasks.</h1>
-    </div>
-  )
+import DrawerNav from '../../Atoms/Drawer/Drawer';
+import Card from '../../Atoms/Card/Card';
+
+
+export default function WorkSpace(){
+    
+    return(
+        <div className={Styles.outer}>
+        <header className={Styles.nav}>
+         
+        </header>
+
+        <section className={Styles.Main}>
+          <DrawerNav/>
+          <Card /> 
+        </section>
+
+
+        </div>
+    )
 }
-
-export default WorkSpace
