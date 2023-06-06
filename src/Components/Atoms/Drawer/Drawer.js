@@ -7,10 +7,18 @@ import zIndex from "@mui/material/styles/zIndex";
 export default function DrawerNav(){
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const[list, setList]= useState("");
+    const[task, setTask]= useState([])
+
+    //to add cards
+
+  
+
+    
 
     return(
         <>
-        <section className={Styles.Drawer}>
+       <section className={Styles.Drawer}>
             <IoChevronForwardCircleOutline className={Styles.DrawerIcon}
             onClick={() => setIsDrawerOpen(true
                 )}/>
