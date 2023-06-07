@@ -1,200 +1,115 @@
-// // import * as React from 'react';
-// // import Box from '@mui/material/Box';
-// // import Drawer from '@mui/material/Drawer';
-// // import Toolbar from '@mui/material/Toolbar';
-// // import List from '@mui/material/List';
-// // import ListItem from '@mui/material/ListItem';
-// // import ListItemButton from '@mui/material/ListItemButton';
-// // import ListItemIcon from '@mui/material/ListItemIcon';
-// // import ListItemText from '@mui/material/ListItemText';
-// // import ClearIcon from '@mui/icons-material/Clear';
-// // import GroupIcon from '@mui/icons-material/Group';
-// // import AddIcon from '@mui/icons-material/Add';
-// // import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import React, { useState } from 'react';
+import { FaTrash, FaUsers, FaPalette } from 'react-icons/fa';
+import styles from './SideBar.module.css';
 
-// // const drawerWidth = 240;
+function Dashboard() {
+  const [showMembers, setShowMembers] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState('url(https://c4.wallpaperflare.com/wallpaper/120/445/121/texture-dark-bluri-wallpaper-thumb.jpg)');
+  const [members, setMembers] = useState([
+    { name: 'Prachi Gupta', github: 'https://github.com/PrachiiGuptaa' },
+    { name: 'Kulsum Arshi', github: 'https://github.com/ARSHIKULSUM' },
+    { name: 'Shravan Jaju', github: 'https://github.com/' },
+    { name: 'Anupam Kumar', github: 'https://github.com/Anupam740' },
+  ]);
 
-// // export default function SideBar(){
-// //     <Box sx={{ display: 'flex' }}>
-// //       <Drawer
-// //         variant="permanent"
-// //         sx={{
-// //           width: drawerWidth,
-// //           flexShrink: 0,
-// //           [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-// //         }}
-// //       >
-// //         <Toolbar />
-// //         <Box sx={{ overflow: 'auto' }}>
-// //           <List>
-// //             <ListItem disablePadding>
-// //               <ListItemButton>
-// //                 <ListItemIcon>
-// //                   <ClearIcon />
-// //                 </ListItemIcon>
-// //                 <ListItemText primary="Clear list" />
-// //               </ListItemButton>
-// //             </ListItem>
-// //             <ListItem disablePadding>
-// //               <ListItemButton>
-// //                 <ListItemIcon>
-// //                   <GroupIcon />
-// //                 </ListItemIcon>
-// //                 <ListItemText primary="Members" />
-// //                 <ListItemIcon>
-// //                   <AddIcon/>
-// //                 </ListItemIcon>
-// //               </ListItemButton>
-// //             </ListItem>
-// //             <ListItem disablePadding>
-// //               <ListItemButton>
-// //                 <ListItemIcon>
-// //                   <ChangeCircleIcon />
-// //                 </ListItemIcon>
-// //                 <ListItemText primary="Change theme" />
-// //               </ListItemButton>
-// //             </ListItem>
-// //           </List>
-// //         </Box>
-// //       </Drawer>
-// //       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-// //       </Box>
-// //     </Box>
-// // }
-
-// import React from 'react';
-// import Box from '@mui/material/Box';
-// import Drawer from '@mui/material/Drawer';
-// import Toolbar from '@mui/material/Toolbar';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemButton from '@mui/material/ListItemButton';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import ClearIcon from '@mui/icons-material/Clear';
-// import GroupIcon from '@mui/icons-material/Group';
-// import AddIcon from '@mui/icons-material/Add';
-// import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
-// import zIndex from '@mui/material/styles/zIndex';
-// // import styles from './SideBar.module.css';
-
-// const drawerWidth = 240;
-
-// export default function SideBar() {
-//   return (
-//     // <div className={styles.sidebar}>
-//     <Box sx={{ display: 'flex', border:"2px solid red" }}>
-//       <Drawer
-//         variant="permanent"
-//         sx={{
-//           width: drawerWidth,
-//           flexShrink: 0,
-//           [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-//           border:"2px solid green"
-//         }}
-//       >
-//         <Toolbar />
-//         <Box sx={{ overflow: 'auto', border:"2px solid red", zIndex:"1000" }}>
-//           <List>
-//             <ListItem disablePadding>
-//               <ListItemButton>
-//                 <ListItemIcon>
-//                   <ClearIcon />
-//                 </ListItemIcon>
-//                 <ListItemText primary="Clear list" />
-//               </ListItemButton>
-//             </ListItem>
-//             <ListItem disablePadding>
-//               <ListItemButton>
-//                 <ListItemIcon>
-//                   <GroupIcon />
-//                 </ListItemIcon>
-//                 <ListItemText primary="Members" />
-//               </ListItemButton>
-//               <ListItemIcon>
-//                 <AddIcon />
-//               </ListItemIcon>
-//             </ListItem>
-//             <ListItem disablePadding>
-//               <ListItemButton>
-//                 <ListItemIcon>
-//                   <ChangeCircleIcon />
-//                 </ListItemIcon>
-//                 <ListItemText primary="Change theme" />
-//               </ListItemButton>
-//             </ListItem>
-//           </List>
-//         </Box>
-//      </Drawer>
-//       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-//       </Box>
-//     </Box>
-//     // </div>
-//   );
-// }
-
-import React, {useState} from "react";
-
-function SideBar() {
-  const [theme, setTheme] = useState('default');
-  const [showThemes, setShowThemes] = useState(false); 
-
-  const changeTheme = (newTheme) => {
-    setTheme(newTheme);
-    setShowThemes(false); 
+  const handleMembersClick = () => {
+    setShowMembers(!showMembers);
   };
 
-  const themeImages = {
-    theme1: 'https://hygger.io/guides/wp-content/uploads/2021/04/physical-kanban-board.jpg',
-    theme2: 'https://talentvis.com/files/images/blog/2022/05/what-you-need-to-know-about-kanban-board.jpg',
-    theme3: 'https://static.kanbantool.com/articles/kanban-board-examples-presentation.jpg',
-    theme4: 'https://img.freepik.com/free-vector/flat-scrum-task-board-with-color-stick-paper-notes_88138-931.jpg',
-    theme5: 'https://media.istockphoto.com/id/1252881184/photo/african-american-woman-writing-kanban-plan.jpg?s=612x612&w=0&k=20&c=Y2FG4W0DQLfiSMljRbXeJkvi269Au-DAJP67MQeuABo=',
+  const SideBar = () => {
+    const [showImageList, setShowImageList] = useState(false);
+
+    const backgroundImages = [
+      'https://c4.wallpaperflare.com/wallpaper/120/445/121/texture-dark-bluri-wallpaper-thumb.jpg',
+      'https://img.freepik.com/free-vector/realistic-polygonal-background_52683-59998.jpg?w=360',
+      'https://c4.wallpaperflare.com/wallpaper/284/753/124/digital-art-dark-wallpaper-preview.jpg',
+      'https://cutewallpaper.org/21/mlg-live-wallpaper/Aesthetic-matte-black-patterns-aesthetic-Black-matte-.jpg',
+      'https://i.pinimg.com/originals/53/d9/cd/53d9cd303086eae0decfed3d000fc976.jpg',
+    ];
+
+    const changeBackground = (image) => {
+      setBackgroundImage(`url(${image})`);
+      setShowImageList(false);
+      const container = document.querySelector(`.${styles.container}`);
+      if (container) {
+        container.style.backgroundImage = `url(${image})`;
+        container.style.backgroundSize = 'cover';
+        container.style.backgroundRepeat = 'no-repeat';
+      } else {
+        console.error('Container element not found');
+      }
+    };
+
+    return (
+      <div>
+        <div style={{ display: 'flex', marginLeft: '0.4rem' }}>
+          <span onClick={() => setShowImageList(!showImageList)} className={styles.theme}>Change Theme</span>
+        </div>
+        {showImageList && (
+          <div>
+            <ul className={styles.sideImg}>
+              {backgroundImages.map((image, index) => (
+                <li
+                  key={index}
+                  onClick={() => changeBackground(image)}
+                  className={styles.listItem}
+                >
+                  <img
+                    src={image}
+                    alt={`Background ${index + 1}`}
+                    className={styles.imagePreview}
+                    width="40"
+                    height="40"
+                    border="1px solid white"
+                  />
+                  <span className={styles.imageLabel}>Theme {index + 1}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div style={{ marginTop: '5rem' }}>
-      <SideBar>
-        <ul>
-          <li>Clear Board</li>
-          <li onClick={() => setShowThemes(!showThemes)}>Change Theme</li>
-          {showThemes && (
-            <ul>
-              <li onClick={() => changeTheme('theme1')}>
-                <img src={themeImages.theme1} alt="Theme 1" width="40" height="40" />
-                <span>Theme 1</span>
-              </li>
-              <li onClick={() => changeTheme('theme2')}>
-                <img src={themeImages.theme2} alt="Theme 2" width="40" height="40" />
-                <span>Theme 2</span>
-              </li>
-              <li onClick={() => changeTheme('theme3')}>
-                <img src={themeImages.theme3} alt="Theme 3" width="40" height="40" />
-                <span>Theme 3</span>
-              </li>
-              <li onClick={() => changeTheme('theme4')}>
-                <img src={themeImages.theme4} alt="Theme 4" width="40" height="40" />
-                <span>Theme 4</span>
-              </li>
-              <li onClick={() => changeTheme('theme5')}>
-                <img src={themeImages.theme5} alt="Theme 5" width="40" height="40" />
-                <span>Theme 5</span>
-              </li>
-            </ul>
-          )}
-          <li>Members</li>
-        </ul>
-      </SideBar>
-      <h1>This is Manage Tasks.</h1>
-      <div>
-        {theme === 'theme1' && <img src={themeImages.theme1} alt="Theme 1" />}
-        {theme === 'theme2' && <img src={themeImages.theme2} alt="Theme 2" />}
-        {theme === 'theme3' && <img src={themeImages.theme3} alt="Theme 3" />}
-        {theme === 'theme4' && <img src={themeImages.theme4} alt="Theme 4" />}
-        {theme === 'theme5' && <img src={themeImages.theme5} alt="Theme 5" />}
+    <div className={styles.wrapper}>
+      <div className={styles.sidebar}>
+        <div className={styles.sidemenu}>
+          <ul>
+            <li className={styles.listItem}>
+              <FaTrash className={styles.icon} />
+              <span className={styles.text}>Clear Board</span>
+            </li>
+            <li className={styles.listItem} onClick={handleMembersClick}>
+              <FaUsers className={styles.icon} />
+              <span className={styles.text}>Members</span>
+            </li>
+            {showMembers && (
+              <div className={styles.membersList}>
+                <ul>
+                  {members.map((member, index) => (
+                    <li key={index}>
+                      <a href={member.github} target="_blank" rel="noopener noreferrer">
+                        {member.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <li className={styles.listItem}>
+              <FaPalette className={styles.icon} />
+              <SideBar />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className={styles.container} style={{ backgroundImage: backgroundImage, backgroundSize: 'cover' }}>
+        <h1>This is Manage Tasks.</h1>
       </div>
     </div>
   );
 }
 
-export default SideBar;
+export default Dashboard;
