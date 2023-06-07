@@ -7,7 +7,8 @@ import {Dialog} from '@mui/material'
 
 import { useState } from 'react'
 import Editable from '../Editable/Editable';
-import Overview from '../Overview/overview'
+import Overview from '../Overview/overview';
+import { nanoid } from 'nanoid'
 
 export default function Card(){
   const[list, setList]= useState("");
@@ -15,7 +16,7 @@ export default function Card(){
 
 // add todo list
   const[todoItem, setTodoItem]=useState("");
-  const[todo, setTodo] =useState([])
+   const[todo, setTodo] =useState([])
   //for dialog box
   const[open, setOpen]=useState(false)
 
@@ -29,68 +30,99 @@ export default function Card(){
 
   };
 
+  const newCard={
+    id: nanoid(),
+    text: list,
+    completed: false
+  
+  }
+    
+
 //to add cards
+function AddCard(){
+  setTask((prev)=>{
+   return [...prev, newCard]
+  })
+ setTodoItem("")
+}
+
+
+/*
   function AddCard(){
        setTask((prev)=>{
         return [...prev, list]
        })
-  }
+      setTodoItem("")
+  }*/
+  
   // add Todo(target input)
   const listItem = (e)=>{
     setTodoItem(e.target.value)
 
   };
 
+
+
+
+  const newTodo = {
+    id: nanoid(), 
+    text: todoItem,
+    completed: false,
+};
+
+
+
     function AddTodo(){
+      
         setTodo((val)=>{
-          return[...val, todoItem]
+         return[...val, newTodo]
+        
         })
+
+        console.log(newTodo)
     }
 
-    function deleteTodo(index){    // updated
-      setTodo((prev) => {
-        const updatedTodo = [...prev]
-        updatedTodo.splice(index, 1)
-        return updatedTodo
-      })
+    function deleteTodo(id) {
+      setTodo((prevTodos) => prevTodos.filter((todoItem) => todoItem.id !== id));
     }
     return(
         <>
 
 
         { 
-           task.map((val)=>{
+           task.map((list)=>{
+
               return (
-                <div className={Styles.addedCard}>
+                <div key={list.id}  className={Styles.addedCard} >
                  <div className={Styles.cardHeader}>
                   
                  <div className={Styles.cardHeader}>
-                  <h4>{val}</h4>
+                  <h4 >{list.text}</h4>
                  <RxCross2 />
                  </div>
                  </div> 
                  {/* adding todo here */}
-                 <div className={Styles.todos}>  
+                 <ul key={list.id}  className={Styles.todos}>  
                    {
 
-                    todo.map((item,index)=>{
+                    todo.map((todoItem)=>{
                       return(
-                        <div className={Styles.todoItems}>
-                        <h4 >{item} </h4>
+                        <div className={Styles.todoItems} >
+                        <li key={todoItem.id}>{todoItem.text} </li>
                         <MdEdit onClick={()=>setOpen(true)}/>
 
                         <Dialog open={open} onClose={()=>setOpen(false)} >
                           <Overview />
                         </Dialog> 
 
-                        <MdDelete onClick={()=>deleteTodo(index)}/> 
+                        <MdDelete onClick={()=>deleteTodo(todoItem.id)}/> 
                          </div>
                       )
                       
                     })
                    
                   }
-                 </div>
+                 </ul>
                  
                  
                  <Editable
@@ -102,7 +134,7 @@ export default function Card(){
                  btnClass={Styles.btn}
                  addCardFunction={AddTodo}
                  SecondCardStyle={Styles.todoAdder}
-                 
+                
                   
                  />
                 </div>

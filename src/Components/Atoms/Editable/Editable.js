@@ -5,7 +5,7 @@ import { ImCross } from 'react-icons/im'
 
 
 export default function Editable({onChangeEvent,SeconButtonText,firstButtonText,InitialInputText,addCardFunction,SecondCardStyle
-                                  ,btnClass,InputStyles,EditableFooterStyle, firstCardStyle}){
+                                  ,btnClass,InputStyles,EditableFooterStyle, firstCardStyle,inputValue}){
 
     const[list, setList]= useState("");
     const[showCard, setShowCard]= useState(false)
@@ -28,7 +28,7 @@ export default function Editable({onChangeEvent,SeconButtonText,firstButtonText,
            {
             showCard ?
             (<div className={SecondCardStyle}>
-              <input className={InputStyles} onChange={onChangeEvent} placeholder={InitialInputText}/>
+              <input className={InputStyles} value={inputValue} onChange={onChangeEvent} placeholder={InitialInputText}/>
               <div className={EditableFooterStyle}>
               <button className={btnClass} onClick={addCardFunction}>{SeconButtonText}</button>
               <ImCross className={Styles.delete} onClick={()=>{setShowCard(false)}}/>
