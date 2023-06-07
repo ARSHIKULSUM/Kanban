@@ -3,7 +3,6 @@ import Styles from './WorkSpace.module.css'
 import DrawerNav from '../../Atoms/Drawer/Drawer';
 import Card from '../../Atoms/Card/Card';
 
-
 export default function WorkSpace(){
     
     return(
@@ -13,7 +12,7 @@ export default function WorkSpace(){
         </header>
 
         <section className={Styles.Main}>
-          <DrawerNav/>
+         
           <Card /> 
         
         </section>
