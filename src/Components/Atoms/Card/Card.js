@@ -47,8 +47,12 @@ export default function Card(){
         })
     }
 
-    function deleteTodo(){
-
+    function deleteTodo(index){    // updated
+      setTodo((prev) => {
+        const updatedTodo = [...prev]
+        updatedTodo.splice(index, 1)
+        return updatedTodo
+      })
     }
     return(
         <>
@@ -69,7 +73,7 @@ export default function Card(){
                  <div className={Styles.todos}>  
                    {
 
-                    todo.map((item)=>{
+                    todo.map((item,index)=>{
                       return(
                         <div className={Styles.todoItems}>
                         <h4 >{item} </h4>
@@ -79,7 +83,7 @@ export default function Card(){
                           <Overview />
                         </Dialog> 
 
-                        <MdDelete onClick={deleteTodo}/> 
+                        <MdDelete onClick={()=>deleteTodo(index)}/> 
                          </div>
                       )
                       

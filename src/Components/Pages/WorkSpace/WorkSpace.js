@@ -1,7 +1,8 @@
 import Styles from './WorkSpace.module.css'
 
-import DrawerNav from '../../Atoms/Drawer/Drawer';
 import Card from '../../Atoms/Card/Card';
+import Dashboard from '../../Atoms/SideBar/SideBar';
+
 
 export default function WorkSpace(){
     
@@ -13,7 +14,9 @@ export default function WorkSpace(){
 
         <section className={Styles.Main}>
          
-          <Card /> 
+        
+          <Dashboard />
+          
         
         </section>
 
