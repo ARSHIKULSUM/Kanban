@@ -17,33 +17,48 @@ export default function Card(){
 // add todo list
   const[todoItem, setTodoItem]=useState("");
    const[todo, setTodo] =useState([])
-  //for dialog box
-  const[open, setOpen]=useState(false)
 
  const[showCard, setShowCard]= useState(false)
   //to expand first card
+  const [cardId, setCardId] = useState("")
   
+  //for dialog box
+  const[open, setOpen]=useState(false)
+  //selecting todo t open overview
+
+  const[selectedTodo, setSelectedTodo] = useState(null)
 
  // to target input 
   const itemEvent = (e)=>{
     setList(e.target.value)
 
   };
-
-  const newCard={
-    id: nanoid(),
-    text: list,
-    completed: false
+ 
+  // const newCard={
+  //   id: nanoid(),
+  //   text: list,
+  //   completed: false
   
-  }
+  // }
     
 
 //to add cards
-function AddCard(){
-  setTask((prev)=>{
-   return [...prev, newCard]
-  })
- setTodoItem("")
+
+
+function AddCard() {
+  const newId = nanoid();
+  setTask((prev) => {
+    return [
+      ...prev,
+      {
+        id: newId,
+        text: list,
+        cards: []
+      }
+    ];
+  });
+  setTodoItem("");
+  setCardId(newId); // Set the cardId state with the new list ID
 }
 
 
@@ -64,27 +79,39 @@ function AddCard(){
 
 
 
-  const newTodo = {
-    id: nanoid(), 
-    text: todoItem,
-    completed: false,
-};
+//   const newTodo = {
+//      id: newCard.id,
+//      text: todoItem,
+//     completed: false,
+//  };
 
 
 
-    function AddTodo(){
-      
-        setTodo((val)=>{
-         return[...val, newTodo]
-        
-        })
+ function AddTodo() {
+  setTask((prev) =>
+    prev.map((task) => {
+      if (task.id === cardId) { // Use the cardId state variable
+        return {
+          ...task,
+          cards: [
+            ...task.cards,
+            {
+              id: cardId, // Use the cardId as the ID for the new card
+              text: todoItem,
+              completed: false
+            }
+          ]
+        };
+      }
+      return task;
+    })
+  );
+  setTodo("");
+}
 
-        console.log(newTodo)
-    }
+    
 
-    function deleteTodo(id) {
-      setTodo((prevTodos) => prevTodos.filter((todoItem) => todoItem.id !== id));
-    }
+    
     return(
         <>
 
@@ -102,20 +129,20 @@ function AddCard(){
                  </div>
                  </div> 
                  {/* adding todo here */}
-                 <ul key={list.id}  className={Styles.todos}>  
+                 <ul className={Styles.todos}>  
                    {
 
-                    todo.map((todoItem)=>{
+                    list.cards.map((card)=>{
                       return(
                         <div className={Styles.todoItems} >
-                        <li key={todoItem.id}>{todoItem.text} </li>
-                        <MdEdit onClick={()=>setOpen(true)}/>
+                        <li key={card.id}>{card.text} </li>
+                        <MdEdit  />
 
                         <Dialog open={open} onClose={()=>setOpen(false)} >
                           <Overview />
                         </Dialog> 
 
-                        <MdDelete onClick={()=>deleteTodo(todoItem.id)}/> 
+                        <MdDelete /> 
                          </div>
                       )
                       
