@@ -7,12 +7,15 @@
 .container{
     width:80vw;
     color: white;
+    border: 2px solid yellow;
+    /* margin-top: -7rem; */
 }
 
 .sidebar{
     width: 20vw;
     background-color: #18191d;
     color: white;
+    /* margin-top: 4.4rem; */
 }
 
 .sidemenu{

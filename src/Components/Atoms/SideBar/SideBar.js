@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaTrash, FaUsers, FaPalette } from 'react-icons/fa';
 import styles from './SideBar.module.css';
+import FinalBoard from '../../Molecules/FinalBoard/FinalBoard';
 
 function Dashboard() {
   const [showMembers, setShowMembers] = useState(false);
@@ -106,7 +107,7 @@ function Dashboard() {
         </div>
       </div>
       <div className={styles.container} style={{ backgroundImage: backgroundImage, backgroundSize: 'cover' }}>
-        <h1>This is Manage Tasks.</h1>
+        <FinalBoard/>
       </div>
     </div>
   );
