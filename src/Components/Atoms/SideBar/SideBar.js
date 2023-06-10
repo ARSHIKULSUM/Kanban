@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTrash, FaUsers, FaPalette } from 'react-icons/fa';
 import styles from './SideBar.module.css';
-import Card from '../Card/Card';
+import Card1 from '../Card/Card1';
 
 function Dashboard() {
   const [showMembers, setShowMembers] = useState(false);
@@ -109,7 +109,7 @@ function Dashboard() {
       
 
       <div className={styles.container} style={{ backgroundImage: backgroundImage, backgroundSize: 'cover' }}>
-      <Card /> 
+      <Card1 /> 
       </div>
 
 
