@@ -1,40 +1,89 @@
-import React, { useState,useRef, useEffect } from "react";
-import Style from './Card.module.css';
+import React, { useState, useRef, useEffect } from "react";
+import { nanoid } from "nanoid";
+import Style from "./Card.module.css";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
+import Overview from "../Overview/overview";
+import { Dialog } from "@mui/material";
+import {useNavigate} from 'react-router-dom'
+
 
 export default function App() {
+
+  const navigate =useNavigate()
+
     const [chapture, setChapture] = useState("");
   const [show, setShow] = useState(false);
-  const [list, setList] = useState([]);
+ // const [list, setList] = useState([]);
+  const [list, setList] = useState(JSON.parse(localStorage.getItem("list")) || []);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showOptions, setShowOptions] = useState(null);
   const editInputRef = useRef(null);
 
+  const [open, setOpen] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
+
+  const [taskName, setTaskName] = useState("");
+
+
+
+  //storing data
+  useEffect(() => {
+    // Retrieve data from localStorage on component mount
+    const storedList = localStorage.getItem("list");
+    if (storedList) {
+      setList(JSON.parse(storedList));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save data to localStorage whenever 'list' changes
+    localStorage.setItem("list", JSON.stringify(list));
+  }, [list]);
+
+
+
+
+
   function handleAdd() {
-    const inputData = { title: chapture, childChapture: "", childrenData: [] };
+    const inputData = {
+      id: nanoid(),
+      title: chapture,
+      childChapture: "",
+      childrenData: [],
+    };
     setList([...list, inputData]);
     setChapture("");
   }
 
-  function handleClick(i) {
-    const updatedList = [...list];
-    const childData = updatedList[i].childChapture;
-    updatedList[i].childrenData.push(childData);
-    setList(updatedList);
-    updatedList[i].childChapture = "";
-    setList(updatedList);
-  }
-
-  function handleChildChapture(i, e) {
-    const updatedList = [...list];
-    updatedList[i].childChapture = e.target.value;
+  function handleClick(id) {
+    const updatedList = list.map((item) => {
+      if (item.id === id) {
+        const newItem = { ...item };
+        newItem.childrenData.push(newItem.childChapture);
+        newItem.childChapture = "";
+        return newItem;
+      }
+      return item;
+    });
     setList(updatedList);
   }
 
-  function handleDragStart(e, parentIndex, childIndex) {
-    e.dataTransfer.setData("parentIndex", parentIndex.toString());
-    e.dataTransfer.setData("childIndex", childIndex.toString());
+  function handleChildChapture(id, e) {
+    const updatedList = list.map((item) => {
+      if (item.id === id) {
+        const newItem = { ...item };
+        newItem.childChapture = e.target.value;
+        return newItem;
+      }
+      return item;
+    });
+    setList(updatedList);
+  }
+
+  function handleDragStart(e, parentId, childIndex) {
+    e.dataTransfer.setData("parentId", parentId);
+    e.dataTransfer.setData("childIndex", childIndex);
     e.target.classList.add("dragging");
   }
 
@@ -50,14 +99,27 @@ export default function App() {
     e.target.classList.remove("over");
   }
 
-  function handleDrop(e, parentIndex, childIndex) {
-    const draggedParentIndex = Number(e.dataTransfer.getData("parentIndex"));
-    const draggedChildIndex = Number(e.dataTransfer.getData("childIndex"));
-    const updatedList = [...list];
-    const draggedItem = updatedList[draggedParentIndex].childrenData[draggedChildIndex];
+  function handleDrop(e, targetId) {
+    const draggedParentId = e.dataTransfer.getData("parentId");
+    const draggedChildIndex = e.dataTransfer.getData("childIndex");
 
-    updatedList[draggedParentIndex].childrenData.splice(draggedChildIndex, 1);
-    updatedList[parentIndex].childrenData.splice(childIndex, 0, draggedItem);
+    const updatedList = [...list];
+    const draggedParentIndex = updatedList.findIndex(
+      (item) => item.id === draggedParentId
+    );
+    const targetParentIndex = updatedList.findIndex(
+      (item) => item.id === targetId
+    );
+
+    const draggedParent = updatedList[draggedParentIndex];
+    const draggedItem = draggedParent.childrenData[draggedChildIndex];
+
+    // Remove the dragged item from the previous list
+    draggedParent.childrenData.splice(draggedChildIndex, 1);
+
+    // Add the dragged item to the new list
+    const targetParent = updatedList[targetParentIndex];
+    targetParent.childrenData.push(draggedItem);
 
     setList(updatedList);
   }
@@ -66,35 +128,58 @@ export default function App() {
     e.preventDefault();
   }
 
-  function handleDeleteList(parentIndex) {
-    const updatedList = [...list];
-    updatedList.splice(parentIndex, 1);
+  function handleDeleteList(id) {
+    const updatedList = list.filter((item) => item.id !== id);
     setList(updatedList);
   }
 
-  function handleDeleteChild(parentIndex, childIndex) {
-    const updatedList = [...list];
-    updatedList[parentIndex].childrenData.splice(childIndex, 1);
+  function handleDeleteChild(parentId, childIndex) {
+    const updatedList = list.map((item) => {
+      if (item.id === parentId) {
+        const newItem = { ...item };
+        newItem.childrenData.splice(childIndex, 1);
+        return newItem;
+      }
+      return item;
+    });
     setList(updatedList);
   }
 
-  function handleEditItem(i) {
-    setSelectedItem(i);
+  function handleEditItem(id) {
+    setSelectedItem(id);
   }
+
+  function handleEditItem1(taskId, taskName) {
+    navigate(`${taskName}`)
+    setSelectedTodoId(taskId);
+    setTaskName(taskName);
+    setOpen(true);
+  }
+   function handleCloseDialog(){
+    setOpen(false)
+    navigate('/managetasks')
+   } 
+    
 
   function handleCancelEdit() {
     setSelectedItem(null);
   }
 
-  function handleSaveEdit(i, value) {
-    const updatedList = [...list];
-    updatedList[i].title = value;
+  function handleSaveEdit(id, value) {
+    const updatedList = list.map((item) => {
+      if (item.id === id) {
+        const newItem = { ...item };
+        newItem.title = value;
+        return newItem;
+      }
+      return item;
+    });
     setList(updatedList);
     setSelectedItem(null);
   }
 
-  function handleOptions(index) {
-    setShowOptions((prevState) => (prevState === index ? null : index));
+  function handleOptions(id) {
+    setShowOptions((prevState) => (prevState === id ? null : id));
   }
 
   function handleHideOptions() {
@@ -119,83 +204,89 @@ export default function App() {
 
   return (
     <div className={Style.container}>
-      {list.map((x, i) => (
+      {list.map((item) => (
         <div
-          key={i}
+          key={item.id}
           className={Style.item}
           onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, i, 0)}
+          onDrop={(e) => handleDrop(e, item.id)}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
-          draggable
-          onDragStart={(e) => handleDragStart(e, i, 0)}
-          onDragEnd={handleDragEnd}
         >
-            
           <div className={Style.cardHeader}>
-          {selectedItem === i ? (
+            {selectedItem === item.id ? (
               <input
                 type="text"
                 className="editInput"
                 ref={editInputRef}
-                defaultValue={x.title}
+                defaultValue={item.title}
                 autoFocus
               />
             ) : (
-            <h1>{x.title}</h1>
+              <h1>{item.title}</h1>
             )}
             <div className="iconContainer">
               <BsThreeDots
                 className="deleteIcon"
-                onClick={() => handleOptions(i)}
+                onClick={() => handleOptions(item.id)}
               />
-              {showOptions === i && (
+              {showOptions === item.id && (
                 <div className="popover">
                   <div className="popoverContent">
-                    <FaEdit className="popoverOption" onClick={() => handleEditItem(i)}/>
-                  
-                    <FaTrashAlt className="popoverOption" onClick={() => handleDeleteList(i)}/>
-                      
+                    <FaEdit
+                      className="popoverOption"
+                      onClick={() => handleEditItem(item.id)}
+                    />
+                    <FaTrashAlt
+                      className="popoverOption"
+                      onClick={() => handleDeleteList(item.id)}
+                    />
                   </div>
                 </div>
               )}
             </div>
           </div>
           <div className="todos">
-            {x.childrenData.map((child, j) => (
+            {item.childrenData.map((child, index) => (
               <div
-              className={Style.todoitemContainer}
-                key={j}
+                className={Style.todoitemContainer}
+                key={index}
                 draggable
-                onDragStart={(e) => handleDragStart(e, i, j)}
+                onDragStart={(e) => handleDragStart(e, item.id, index)}
                 onDragEnd={handleDragEnd}
               >
                 {child}
                 <div className="iconContainer">
-                  <FaEdit className={Style.editIcon} />
+                <FaEdit
+                    className={Style.editIcon}
+                    onClick={() => handleEditItem1(item.id, child)}
+                  />
                   <FaTrashAlt
                     className="deleteIcon"
-                    onClick={() => handleDeleteChild(i, j)}
+                    onClick={() => handleDeleteChild(item.id, index)}
                   />
+                  
                 </div>
               </div>
             ))}
+               {open && selectedTodoId !== null && selectedTodoId === item.id && (
+              <Dialog open={open} onClose={handleCloseDialog}>
+                <Overview cardTitle={item.title} taskName={taskName} />
+              </Dialog>
+            )}
+
+
           </div>
-         
-
-
           <input
             className={Style.inputTodoAdder}
-            value={x.childChapture}
-            onChange={(e) => handleChildChapture(i, e)}
+            value={item.childChapture}
+            onChange={(e) => handleChildChapture(item.id, e)}
           />
-          <button className={Style.btn }onClick={() => handleClick(i)}>
+          <button className={Style.btn} onClick={() => handleClick(item.id)}>
             Add Item
           </button>
         </div>
-        
       ))}
-
       <div className={Style.itemCard}>
         {show ? (
           <div className={Style.todoAdder}>
